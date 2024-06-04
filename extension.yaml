@@ -1,0 +1,58 @@
+apiVersion: kubesphere.io/v1alpha1
+name: cost-optimization
+version: 1.110.0
+displayName:
+  zh: 成本管理
+  en: cost-optimization
+description:
+  zh: 面向云原生环境的开源成本监控系统
+  en: Open source cost monitoring for cloud native environments
+category: observability
+keywords:
+  - cloud-costs
+  - cost-optimization
+  - finops
+  - monitoring
+  - opencost
+home: https://kubesphere.com.cn/
+docs: https://docs.kubesphere.com.cn/
+sources:
+  - https://www.opencost.io/
+kubeVersion: ">=1.19.0-0"
+ksVersion: ">=4.1.0-0"
+maintainers:
+  - name: KubeSphere
+    email: kubesphere@yunify.com
+provider:
+  zh:
+    name: 北京青云科技股份有限公司
+    email: kubesphere@yunify.com
+    url: https://kubesphere.com.cn/
+  en:
+    name: QingCloud Technologies
+    email: kubesphere@yunify.com
+    url: https://kubesphere.co/
+icon: ./static/favicon.ico
+screenshots: []
+dependencies:
+  - name: opencost
+    tags:
+      - extension
+    alias: costmodel
+  - name: opencost
+    tags:
+      - agent
+    alias: prometheus-opencost-exporter
+#  - name: prometheus-opencost-exporter
+#    tags:
+#      - agent
+# installationMode describes how to install subcharts, it can be HostOnly or Multicluster.
+# In Multicluster mode, the subchart with tag `extension` will only be deployed to the host cluster,
+# and the subchart with tag `agent` will be deployed to all selected clusters.
+installationMode: Multicluster
+externalDependencies:
+  - name: whizard-monitoring
+    type: extension
+    version: '>= 1.0.0-0'
+    required: false
+

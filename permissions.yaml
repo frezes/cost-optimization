@@ -1,0 +1,36 @@
+kind: ClusterRole
+rules:
+  - verbs:
+      - '*'
+    apiGroups:
+      - 'extensions.kubesphere.io'
+      - 'rbac.authorization.k8s.io'
+    resources:
+      - '*'
+
+---
+kind: Role
+rules:
+  - verbs:
+      - '*'
+    apiGroups:
+      - ''
+      - 'apps'
+      - 'batch'
+      - 'app.k8s.io'
+      - 'autoscaling'
+    resources:
+      - '*'
+  - verbs:
+      - '*'
+    apiGroups:
+      - 'networking.k8s.io'
+    resources:
+      - 'ingresses'
+      - 'networkpolicies'
+  - verbs:
+      - '*'
+    apiGroups:
+      - 'monitoring.coreos.com'
+    resources:
+      - 'servicemonitors'

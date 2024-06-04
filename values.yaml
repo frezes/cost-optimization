@@ -1,0 +1,26 @@
+opencost:
+  opencost:
+    exporter:
+      securityContext:
+        runAsUser: 0
+        runAsNonRoot: false
+    metrics:
+      serviceMonitor:
+        enabled: false
+
+    customPricing:
+      enabled: true
+
+
+    prometheus:
+      internal:
+        enabled: false
+        serviceName: prometheus-k8s
+        namespaceName: kubesphere-monitoring-system
+        port: 9090
+      thanos:
+        enabled: true
+        internal:
+          serviceName: query-frontend-whizard-operated
+          namespaceName: kubesphere-monitoring-system
+          port: 10902
