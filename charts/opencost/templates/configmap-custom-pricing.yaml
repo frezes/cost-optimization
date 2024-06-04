@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.opencost.customPricing.configmapName }}
+  name: {{ include "opencost.fullname" . }}-{{ .Values.opencost.customPricing.configmapName }}
   namespace: {{ include "opencost.namespace" . }}
 data:
   {{ include "opencost.configFileName" . }}.json: |-

@@ -36,19 +36,15 @@ icon: ./static/favicon.ico
 screenshots: []
 dependencies:
   - name: opencost
+    version: "1.38.*"
     tags:
       - extension
     alias: costmodel
   - name: opencost
+    version: "1.38.*"
     tags:
       - agent
-    alias: prometheus-opencost-exporter
-#  - name: prometheus-opencost-exporter
-#    tags:
-#      - agent
-# installationMode describes how to install subcharts, it can be HostOnly or Multicluster.
-# In Multicluster mode, the subchart with tag `extension` will only be deployed to the host cluster,
-# and the subchart with tag `agent` will be deployed to all selected clusters.
+    alias: exporter
 installationMode: Multicluster
 externalDependencies:
   - name: whizard-monitoring

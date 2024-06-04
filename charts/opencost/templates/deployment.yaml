@@ -368,12 +368,12 @@ spec:
         {{- if .Values.opencost.customPricing.enabled }}
         - name: custom-configs
           configMap:
-            name: {{ .Values.opencost.customPricing.configmapName }}
+            name: {{ template "opencost.fullname" . }}-{{ .Values.opencost.customPricing.configmapName }}
         {{- end }}
         {{- if .Values.opencost.metrics.config.enabled }}
         - name: custom-metrics
           configMap:
-            name: {{ .Values.opencost.metrics.config.configmapName }}
+            name: {{ template "opencost.fullname" . }}-{{ .Values.opencost.metrics.config.configmapName }}
         {{- end }}
         {{- if .Values.opencost.exporter.persistence.enabled }}
         - name: opencost-export

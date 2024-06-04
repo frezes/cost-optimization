@@ -1,16 +1,21 @@
-opencost:
+costmodel:
   opencost:
     exporter:
+      image:
+        registry: ghcr.io
+        repository: opencost/opencost
+        # @default -- `""` (use appVersion in Chart.yaml)
+        tag: ""
       securityContext:
         runAsUser: 0
         runAsNonRoot: false
+
     metrics:
       serviceMonitor:
         enabled: false
 
     customPricing:
       enabled: true
-
 
     prometheus:
       internal:
@@ -24,3 +29,31 @@ opencost:
           serviceName: query-frontend-whizard-operated
           namespaceName: kubesphere-monitoring-system
           port: 10902
+
+exporter:
+  opencost:
+    exporter:
+      image:
+        registry: ghcr.io
+        repository: opencost/opencost
+        # @default -- `""` (use appVersion in Chart.yaml)
+        tag: ""
+      securityContext:
+        runAsUser: 0
+        runAsNonRoot: false
+    metrics:
+      serviceMonitor:
+        enabled: true
+
+    customPricing:
+      enabled: true
+
+    prometheus:
+      internal:
+        enabled: true
+        serviceName: prometheus-k8s
+        namespaceName: kubesphere-monitoring-system
+        port: 9090
+
+    ui:
+      enabled: false
