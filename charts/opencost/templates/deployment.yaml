@@ -65,7 +65,7 @@ spec:
           {{- if .Values.opencost.exporter.image.fullImageName }}
           image: {{ .Values.opencost.exporter.image.fullImageName }}
           {{- else }}
-          image: "{{ .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "%s" .Chart.AppVersion) }}"
+          image: "{{ .Values.global.imageRegistry | default .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "%s" .Chart.AppVersion) }}"
           {{- end}}
           imagePullPolicy: {{ .Values.opencost.exporter.image.pullPolicy }}
           args:
@@ -131,7 +131,7 @@ spec:
                   key: CLOUD_PROVIDER_API_KEY
             {{- end }}
             - name: CLUSTER_ID
-              value: {{ .Values.opencost.exporter.defaultClusterId | quote }}
+              value: {{ .Values.global.clusterInfo.name | default .Values.opencost.exporter.defaultClusterId | quote }}
             {{- if .Values.opencost.exporter.aws.access_key_id }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
@@ -267,7 +267,7 @@ spec:
           {{- if .Values.opencost.ui.image.fullImageName }}
           image: {{ .Values.opencost.ui.image.fullImageName }}
           {{- else}}
-          image: "{{ .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "%s" .Chart.AppVersion) }}"
+          image: "{{  .Values.global.imageRegistry | default .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "%s" .Chart.AppVersion) }}"
           {{- end }}
           imagePullPolicy: {{ .Values.opencost.ui.image.pullPolicy }}
           ports:

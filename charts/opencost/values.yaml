@@ -1,3 +1,8 @@
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  clusterInfo: {}
+
 # -- Overwrite the default name of the chart
 nameOverride: ""
 # -- Overwrite all resources name created by the chart

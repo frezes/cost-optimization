@@ -35,16 +35,16 @@ provider:
 icon: ./static/favicon.ico
 screenshots: []
 dependencies:
-  - name: opencost
+  - alias: costmodel
+    name: opencost
     version: "1.38.*"
     tags:
       - extension
-    alias: costmodel
-  - name: opencost
+  - alias: exporter
+    name: opencost
     version: "1.38.*"
     tags:
       - agent
-    alias: exporter
 installationMode: Multicluster
 externalDependencies:
   - name: whizard-monitoring
