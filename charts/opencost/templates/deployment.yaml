@@ -110,7 +110,7 @@ spec:
             - name: LOG_LEVEL
               value: {{ .Values.loglevel }}
             - name: CUSTOM_COST_ENABLED
-              value: {{ .Values.plugins.enabled | quote }}
+              value: {{ .Values.opencost.customPricing.enabled | quote }}
             - name: KUBECOST_NAMESPACE
               value: {{ include "opencost.namespace" . }}
             {{- if .Values.opencost.metrics.config.enabled }}
@@ -130,6 +130,8 @@ spec:
                   name: {{ include "opencost.prometheus.secretname" . }}
                   key: CLOUD_PROVIDER_API_KEY
             {{- end }}
+            - name : PROM_CLUSTER_ID_LABEL
+              value: {{ .Values.opencost.exporter.defaultClusterIdLabel | quote }}
             - name: CLUSTER_ID
               value: {{ .Values.global.clusterInfo.name | default .Values.opencost.exporter.defaultClusterId | quote }}
             {{- if .Values.opencost.exporter.aws.access_key_id }}
@@ -238,7 +240,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- if .Values.opencost.exporter.persistence.enabled }}
-            - mountPath: /mnt/export
+            - mountPath: {{ .Values.opencost.exporter.csv_path | quote }}
               name: opencost-export
               readOnly: false
             {{- end }}

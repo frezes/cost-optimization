@@ -34,6 +34,9 @@ spec:
       tlsConfig:
       {{- toYaml . | nindent 8}}
       {{- end }}
+  jobLabel: {{ .Values.opencost.metrics.serviceMonitor.jobLabel }}
+  targetLabels:
+    - {{ .Values.opencost.exporter.defaultClusterIdLabel | quote }}
   selector:
     matchLabels: {{- include "opencost.selectorLabels" . | nindent 6 }}
   namespaceSelector:

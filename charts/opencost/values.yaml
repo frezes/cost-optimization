@@ -96,8 +96,9 @@ service:
   enabled: true
   # --  Annotations to add to the service
   annotations: {}
-  # --  Labels to add to the service account
-  labels: {}
+  # --  Labels to add to the service
+  labels:
+    'jobLabel': 'opencost'
   # --  Kubernetes Service type
   type: ClusterIP
   # -- NodePort if service type is NodePort
@@ -127,6 +128,8 @@ opencost:
     # debugPort: 40000 # for development purposes (debugging with delve) and not for production.
     # -- The GCP Pricing API requires a key. This is supplied just for evaluation.
     cloudProviderApiKey: ""
+    # -- Default cluster ID label to use in Prometheus metrics.
+    defaultClusterIdLabel: "cluster_id"
     # -- Default cluster ID to use if cluster_id is not set in Prometheus metrics.
     defaultClusterId: 'default-cluster'
     image:
@@ -200,7 +203,7 @@ opencost:
       # runAsUser: 1000
 
     # Path of CSV file
-    csv_path: ""
+    csv_path: "/mnt/export"
 
     # Persistent volume claim for storing the data. eg: csv file
     persistence:
@@ -281,7 +284,8 @@ opencost:
       # -- Create ServiceMonitor resource for scraping metrics using PrometheusOperator
       enabled: false
       # -- Additional labels to add to the ServiceMonitor
-      additionalLabels: {}
+      additionalLabels:
+        'app.kubernetes.io/vendor': 'kubesphere'
       # -- Specify if the ServiceMonitor will be deployed into a different namespace (blank deploys into same namespace as chart)
       namespace: ""
       # -- Interval at which metrics should be scraped
@@ -291,13 +295,19 @@ opencost:
       # -- HonorLabels chooses the metric's labels on collisions with target labels
       honorLabels: true
       # -- RelabelConfigs to apply to samples before scraping. Prometheus Operator automatically adds relabelings for a few standard Kubernetes fields
-      relabelings: []
+      relabelings:
+      - action: labeldrop
+        regex: (container|pod|service|endpoint|namespace)
       # -- MetricRelabelConfigs to apply to samples before ingestion
       metricRelabelings: []
       # -- extra Endpoints to add to the ServiceMonitor.  Useful for scraping sidecars
       extraEndpoints: []
         # - port: oauth-metrics
         #   path: /metrics
+      # -- extra labels to add to the metrics
+      targetLabels: []
+        # - cluster_id
+      jobLabel: jobLabel
       # -- HTTP scheme used for scraping. Defaults to `http`
       scheme: http
       # -- TLS configuration for scraping metrics

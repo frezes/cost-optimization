@@ -5,6 +5,7 @@ metadata:
   name: {{ include "opencost.fullname" . }}
   namespace: {{ include "opencost.namespace" . }}
   labels:
+    {{ .Values.opencost.exporter.defaultClusterIdLabel | quote }}: {{ .Values.global.clusterInfo.name | default .Values.opencost.exporter.defaultClusterId | quote }}
     {{- include "opencost.labels" . | nindent 4 }}
     {{- with .Values.service.labels }}
       {{- toYaml . | nindent 4 }}

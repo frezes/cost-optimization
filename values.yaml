@@ -46,6 +46,14 @@ exporter:
       securityContext:
         runAsUser: 0
         runAsNonRoot: false
+      persistence:
+        enabled: true
+        annotations:
+          "helm.sh/resource-policy": keep
+        storageClass: ""
+        accessMode: ReadWriteOnce
+        size: 10Gi
+
     metrics:
       serviceMonitor:
         enabled: true
