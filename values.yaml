@@ -6,14 +6,27 @@ global:
 costmodel:
   opencost:
     exporter:
+      extraArgs: ["cost-model"]
+      extraEnv:
+        EXPORT_CSV_LABELS_LIST: kubesphere_io_workspace
+        ETL_READ_ONLY: "true"
+        CLUSTER_INFO_FILE_ENABLED: "true"
+        CLUSTER_CACHE_FILE_ENABLED: "true"
+      defaultClusterId: 'host'      
       image:
-        registry: ghcr.io
-        repository: opencost/opencost
-        # @default -- `""` (use appVersion in Chart.yaml)
-        tag: ""
+        registry: docker.io
+        repository: frezes/opencost
+        tag: dev
       securityContext:
         runAsUser: 0
         runAsNonRoot: false
+      persistence:
+        enabled: true
+        annotations:
+          "helm.sh/resource-policy": keep
+        storageClass: ""
+        accessMode: ReadWriteOnce
+        size: 5Gi
 
     metrics:
       serviceMonitor:
@@ -21,6 +34,17 @@ costmodel:
 
     customPricing:
       enabled: true
+      costModel:
+        description: Modified pricing configuration.
+        CPU: 1.25
+        spotCPU: 0.006655
+        RAM: 0.50
+        spotRAM: 0.000892
+        GPU: 0.95
+        storage: 0.25
+        zoneNetworkEgress: 0.01
+        regionNetworkEgress: 0.01
+        internetNetworkEgress: 0.12
 
     prometheus:
       internal:
@@ -38,25 +62,27 @@ costmodel:
 exporter:
   opencost:
     exporter:
+      extraArgs: ["agent"]
+      extraEnv:
+        KUBECOST_METRICS_PORT: 9003 
+
       image:
-        registry: ghcr.io
-        repository: opencost/opencost
-        # @default -- `""` (use appVersion in Chart.yaml)
-        tag: ""
+        registry: docker.io
+        repository: frezes/opencost
+        tag: dev
       securityContext:
         runAsUser: 0
         runAsNonRoot: false
-      persistence:
-        enabled: true
-        annotations:
-          "helm.sh/resource-policy": keep
-        storageClass: ""
-        accessMode: ReadWriteOnce
-        size: 10Gi
 
     metrics:
       serviceMonitor:
         enabled: true
+
+      config:
+        enabled: false
+        configmapName: custom-metrics
+        disabledMetrics: []
+
 
     customPricing:
       enabled: true

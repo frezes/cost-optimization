@@ -70,7 +70,7 @@ spec:
           imagePullPolicy: {{ .Values.opencost.exporter.image.pullPolicy }}
           args:
           {{- range .Values.opencost.exporter.extraArgs }}
-          - --{{ . }}
+          - {{ . }}
           {{- end }}
           ports:
             - containerPort: {{ .Values.opencost.exporter.apiPort }}
@@ -170,7 +170,7 @@ spec:
             {{- end }}
             {{- if and .Values.opencost.exporter.persistence.enabled .Values.opencost.exporter.csv_path }}
             - name: EXPORT_CSV_FILE
-              value: {{ .Values.opencost.exporter.csv_path | quote }}
+              value: {{ .Values.opencost.exporter.csv_path }}/exporter.csv
             {{- end }}
             {{- if .Values.opencost.prometheus.thanos.enabled }}
             - name: THANOS_ENABLED
@@ -380,7 +380,7 @@ spec:
         {{- if .Values.opencost.exporter.persistence.enabled }}
         - name: opencost-export
           persistentVolumeClaim:
-            claimName: {{ include "opencost.fullname" . }}-pvc
+            claimName: {{ include "opencost.fullname" . }}
         {{- end }}
         {{- if .Values.opencost.cloudIntegrationSecret }}
         - name: cloud-integration

@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "opencost.fullname" . }}-pvc
+  name: {{ include "opencost.fullname" . }}
   namespace: {{ include "opencost.namespace" . }}
   labels: {{- include "opencost.labels" . | nindent 4 }}
   {{- with .Values.opencost.exporter.persistence.annotations  }}
@@ -11,8 +11,18 @@ metadata:
 spec:
   accessModes:
     - {{ .Values.opencost.exporter.persistence.accessMode | quote }}
-  storageClassName: {{ default "" .Values.opencost.exporter.persistence.storageClass }}
   resources:
     requests:
       storage: {{ .Values.opencost.exporter.persistence.size | quote }}
+  {{- if (lookup "v1" "PersistentVolumeClaim" (include "opencost.namespace" .) (include "opencost.fullname" .)) }}
+  volumeName: {{ (lookup "v1" "PersistentVolumeClaim" (include "opencost.namespace" .) (include "opencost.fullname" .)).spec.volumeName }}
+  {{- end }}
+  {{- with .Values.opencost.exporter.persistence.storageClass }}
+  storageClassName: {{ . }}
+  {{- end }}
+  {{- with .Values.opencost.exporter.persistence.selectorLabels }}
+  selector:
+    matchLabels:
+    {{- toYaml . | nindent 6 }}
+  {{- end }}
 {{- end }}

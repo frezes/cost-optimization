@@ -10,6 +10,9 @@ data:
 {{- range $key, $val := .Values.opencost.customPricing.costModel }}
 {{ $key | quote | indent 6}}: {{ $val | quote }},
 {{- end}}
+{{- if  eq .Values.opencost.customPricing.provider "custom" }}
+      "clusterName" : {{ .Values.global.clusterInfo.name | default .Values.opencost.exporter.defaultClusterId | quote }},
+{{- end }}
       "provider" : {{ .Values.opencost.customPricing.provider | quote }}
     }
 {{- end }}
