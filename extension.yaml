@@ -1,9 +1,9 @@
 apiVersion: kubesphere.io/v1alpha1
-name: cost-optimization
-version: 1.110.0
+name: cost-analysis
+version: 1.111.0
 displayName:
-  zh: 成本管理
-  en: cost-optimization
+  zh: 成本分析
+  en: cost-analysis
 description:
   zh: 面向云原生环境的开源成本监控系统
   en: Open source cost monitoring for cloud native environments
@@ -18,7 +18,7 @@ home: https://kubesphere.com.cn/
 docs: https://docs.kubesphere.com.cn/
 sources:
   - https://www.opencost.io/
-kubeVersion: ">=1.19.0-0"
+kubeVersion: ">=1.23.0-0"
 ksVersion: ">=4.1.0-0"
 maintainers:
   - name: KubeSphere
@@ -49,6 +49,6 @@ installationMode: Multicluster
 externalDependencies:
   - name: whizard-monitoring
     type: extension
-    version: '>= 1.0.0-0'
+    version: '>= 1.1.0-0'
     required: false
 

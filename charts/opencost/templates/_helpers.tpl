@@ -157,8 +157,6 @@ apiVersion: networking.k8s.io/v1beta1
 {{- end }}
 {{- end -}}
 
-
-
 {{/*
 To help compatibility with other charts which use global.imagePullSecrets.
 Allow either an array of {name: pullSecret} maps (k8s-style), or an array of strings (more common helm-style).
@@ -182,4 +180,27 @@ global:
 - name: {{ . }}
   {{- end }}
 {{- end }}
+{{- end -}}
+
+{{- define "opencost.imageTag" -}}
+{{ .Values.opencost.exporter.image.tag | default (printf "%s" .Chart.AppVersion) }}
+{{- end -}}
+
+{{- define "opencost.fullImageName" -}}
+{{- if .Values.opencost.exporter.image.fullImageName }}
+{{- .Values.opencost.exporter.image.fullImageName -}}
+{{- else}}
+{{- .Values.opencost.exporter.image.registry -}}/{{- .Values.opencost.exporter.image.repository -}}:{{- include "opencost.imageTag" . -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "opencostUi.imageTag" -}}
+{{- .Values.opencost.ui.image.tag | default (printf "%s" .Chart.AppVersion) -}}
+{{- end -}}
+
+{{- define "opencostUi.fullImageName" -}}
+{{- if .Values.opencost.ui.image.fullImageName }}
+{{- .Values.opencost.ui.image.fullImageName -}}
+{{- else}}
+{{- .Values.opencost.ui.image.registry -}}/{{- .Values.opencost.ui.image.repository -}}:{{- include "opencostUi.imageTag" . -}}
 {{- end -}}

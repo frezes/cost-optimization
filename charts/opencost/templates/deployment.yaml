@@ -62,15 +62,11 @@ spec:
       {{- end }}
       containers:
         - name: {{ include "opencost.fullname" . }}
-          {{- if .Values.opencost.exporter.image.fullImageName }}
-          image: {{ .Values.opencost.exporter.image.fullImageName }}
-          {{- else }}
-          image: "{{ .Values.global.imageRegistry | default .Values.opencost.exporter.image.registry }}/{{ .Values.opencost.exporter.image.repository }}:{{ .Values.opencost.exporter.image.tag | default (printf "%s" .Chart.AppVersion) }}"
-          {{- end}}
+          image: {{ include "opencost.fullImageName" . }}
           imagePullPolicy: {{ .Values.opencost.exporter.image.pullPolicy }}
           args:
           {{- range .Values.opencost.exporter.extraArgs }}
-          - {{ . }}
+          - --{{ . }}
           {{- end }}
           ports:
             - containerPort: {{ .Values.opencost.exporter.apiPort }}
@@ -120,6 +116,10 @@ spec:
             {{- if .Values.opencost.exporter.apiPort }}
             - name: API_PORT
               value: {{ .Values.opencost.exporter.apiPort | quote }}
+            {{- end }}
+            {{- if .Values.opencost.carbonCost.enabled }}
+            - name: CARBON_ESTIMATES_ENABLED
+              value: {{ .Values.opencost.carbonCost.enabled | quote }}
             {{- end }}
             - name: PROMETHEUS_SERVER_ENDPOINT
               value: {{ include "opencost.prometheusServerEndpoint" . | quote }}
@@ -266,11 +266,7 @@ spec:
           {{- end }}
         {{- if .Values.opencost.ui.enabled }}
         - name: opencost-ui
-          {{- if .Values.opencost.ui.image.fullImageName }}
-          image: {{ .Values.opencost.ui.image.fullImageName }}
-          {{- else}}
-          image: "{{  .Values.global.imageRegistry | default .Values.opencost.ui.image.registry }}/{{ .Values.opencost.ui.image.repository }}:{{ .Values.opencost.ui.image.tag | default (printf "%s" .Chart.AppVersion) }}"
-          {{- end }}
+          image: {{ include "opencostUi.fullImageName" .}}
           imagePullPolicy: {{ .Values.opencost.ui.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.opencost.ui.uiPort }}
@@ -370,17 +366,17 @@ spec:
         {{- if .Values.opencost.customPricing.enabled }}
         - name: custom-configs
           configMap:
-            name: {{ template "opencost.fullname" . }}-{{ .Values.opencost.customPricing.configmapName }}
+            name: {{ .Values.opencost.customPricing.configmapName }}
         {{- end }}
         {{- if .Values.opencost.metrics.config.enabled }}
         - name: custom-metrics
           configMap:
-            name: {{ template "opencost.fullname" . }}-{{ .Values.opencost.metrics.config.configmapName }}
+            name: {{ .Values.opencost.metrics.config.configmapName }}
         {{- end }}
         {{- if .Values.opencost.exporter.persistence.enabled }}
         - name: opencost-export
           persistentVolumeClaim:
-            claimName: {{ include "opencost.fullname" . }}
+            claimName: {{ include "opencost.fullname" . }}-pvc
         {{- end }}
         {{- if .Values.opencost.cloudIntegrationSecret }}
         - name: cloud-integration
