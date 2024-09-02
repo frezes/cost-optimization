@@ -37,12 +37,12 @@ screenshots: []
 dependencies:
   - alias: costmodel
     name: opencost
-    version: "1.38.*"
+    version: "1.41.*"
     tags:
       - extension
   - alias: exporter
     name: opencost
-    version: "1.38.*"
+    version: "1.41.*"
     tags:
       - agent
 installationMode: Multicluster

@@ -15,12 +15,4 @@ spec:
   resources:
     requests:
       storage: {{ .Values.opencost.exporter.persistence.size | quote }}
-  {{- if (lookup "v1" "PersistentVolumeClaim" (include "opencost.namespace" .) (include "opencost.fullname" .)) }}
-  volumeName: {{ (lookup "v1" "PersistentVolumeClaim" (include "opencost.namespace" .) (include "opencost.fullname"-pvc .)).spec.volumeName }}
-  {{- end }}
-  {{- with .Values.opencost.exporter.persistence.selectorLabels }}
-  selector:
-    matchLabels:
-    {{- toYaml . | nindent 6 }}
-  {{- end }}
 {{- end }}
